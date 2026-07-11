@@ -64,6 +64,9 @@
     "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^1.2.0"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "vue-demi"]
+  },
   "lint-staged": {
     "*.{ts,tsx,vue}": [
       "pnpm lint:fix"
