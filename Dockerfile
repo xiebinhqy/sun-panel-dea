@@ -10,9 +10,11 @@ WORKDIR /build
 
 COPY ./package.json /build
 
+COPY .npmrc /build/.npmrc
+
 COPY ./pnpm-lock.yaml /build
 
-RUN pnpm install
+RUN pnpm install --no-frozen-lockfile
 
 COPY . /build
 
