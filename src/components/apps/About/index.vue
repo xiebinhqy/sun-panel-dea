@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton, NDivider, NGradientText, NTag } from 'naive-ui'
+import { NDivider, NGradientText, NTag } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 import { get } from '@/api/system/about'
 import { useAppStore } from '@/store'
@@ -12,8 +12,6 @@ import srcYoutube from '@/assets/about_image/youtube.png'
 import srcQQGroupQR from '@/assets/about_image/qq_group_qr2.png'
 import { RoundCardModal } from '@/components/common'
 import UpdateDialog from './UpdateDialog.vue'
-import { t } from '@/locales'
-
 interface Version {
   versionName: string
   versionCode: number

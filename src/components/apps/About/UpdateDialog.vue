@@ -14,7 +14,6 @@ const emit = defineEmits<{
   (e: 'done'): void
 }>()
 
-const loading = ref(false)
 const checking = ref(true)
 const updating = ref(false)
 const updateResult = ref<VersionCheckResult | null>(null)
@@ -58,7 +57,7 @@ async function handleCheck() {
   checking.value = true
   errorMsg.value = ''
   try {
-    const res = await checkUpdate<{ code: number; data: VersionCheckResult }>()
+    const res = await checkUpdate<VersionCheckResult>()
     if (res.code === 0) {
       updateResult.value = res.data
     } else {
@@ -77,7 +76,7 @@ async function handleUpdate() {
     updateMessage.value = ''
     errorMsg.value = ''
     
-    const res = await performUpdate<{ code: number; data: { message: string } }>()
+    const res = await performUpdate<{ message: string }>()
     if (res.code === 0) {
       const data = res.data as { message?: string }
       updateMessage.value = data?.message || t('apps.about.updateStarted')
@@ -97,7 +96,7 @@ async function handleUpdate() {
 function startStatusPolling() {
   statusTimer = setInterval(async () => {
     try {
-      const res = await getUpdateStatus<{ code: number; data: { status: string } }>()
+      const res = await getUpdateStatus<{ status: string }>()
       const statusData = res.data as { status?: string }
       if (res.code === 0 && statusData?.status === 'idle') {
         // 更新完成
