@@ -24,7 +24,7 @@ RUN pnpm run build
 # 最新alpine3.19导致sqlite3编译失败(https://github.com/mattn/go-sqlite3/issues/1164，
 # 临时解决方案:https://github.com/mattn/go-sqlite3/pull/1177)
 # sun-panel暂时解决方案使用golang:1.21-alpine3.18（因旧版本使用没问题，短期内较稳定） 
-FROM golang:1.21-alpine3.18 as server_image
+FROM golang:1.21-alpine3.18 AS server_image
 
 WORKDIR /build
 
@@ -65,4 +65,4 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.19/community" >> /etc/apk/repo
 
 EXPOSE 3002
 
-CMD ./sun-panel
+CMD ["./sun-panel"]
