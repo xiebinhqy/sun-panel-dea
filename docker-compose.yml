@@ -1,0 +1,15 @@
+version: "3.2"
+
+services:
+  sun-panel:
+    image: 'deattorsss/sun-panel-dea:latest'
+    container_name: sun-panel-dea
+    volumes:
+    - ./conf:/app/conf
+    - ./uploads:/app/uploads
+    - ./database:/app/database
+    - /var/run/docker.sock:/var/run/docker.sock
+    # - ./runtime:/app/runtime
+    ports:
+    - 3002:3002
+    restart: always

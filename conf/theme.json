@@ -1,0 +1,9 @@
+{
+  "mode": "light",
+  "color": "#1890ff",
+  "primaryColor": "#1890ff",
+  "secondaryColor": "#52c41a",
+  "fontFamily": "system-ui, -apple-system, sans-serif",
+  "customCSS": "",
+  "components": null
+}
