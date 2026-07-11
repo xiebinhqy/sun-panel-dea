@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NButton, NModal, NSpace, NSpin, NText, NTag, NProgress, NDivider } from 'naive-ui'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { checkUpdate, performUpdate, getUpdateStatus } from '@/api/system/update'
 import type { VersionCheckResult } from '@/api/system/update'
 import { t } from '@/locales'
@@ -126,6 +126,12 @@ function handleCancel() {
   if (updating.value) return // 更新中不允许关闭
   handleClose()
 }
+
+watch(() => props.show, (newVal: boolean) => {
+  if (newVal) {
+    handleCheck()
+  }
+})
 
 onMounted(() => {
   if (props.show) {

@@ -89,6 +89,15 @@ func (a *UpdateApi) CheckUpdate(c *gin.Context) {
 	}
 
 	// 处理 API 限流等情况
+	if resp.StatusCode == 404 {
+		// 没有 Release 发布，视为当前已是最新
+		result.LatestVersion = currentVer.Version
+		result.ReleaseNotes = ""
+		result.HasUpdate = false
+		apiReturn.SuccessData(c, result)
+		return
+	}
+
 	if resp.StatusCode != 200 {
 		apiReturn.Error(c, fmt.Sprintf("GitHub API返回错误状态码: %d", resp.StatusCode))
 		return
