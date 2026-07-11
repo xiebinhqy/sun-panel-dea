@@ -4,7 +4,7 @@ FROM node AS web_image
 # 华为源
 # RUN npm config set registry https://repo.huaweicloud.com/repository/npm/
 
-RUN npm install pnpm -g
+RUN npm install pnpm@8 -g
 
 WORKDIR /build
 
