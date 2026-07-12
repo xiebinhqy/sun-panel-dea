@@ -60,6 +60,10 @@ declare namespace Panel {
         systemMonitorShowTitle?:boolean
         systemMonitorPublicVisitModeShow?:boolean
         netModeChangeButtonShow?:boolean
+        // v1.4.0 站点设置
+        siteTitle?:string
+        siteFavicon?:string
+        loginBackground?:string
     }
 
     interface userConfig{

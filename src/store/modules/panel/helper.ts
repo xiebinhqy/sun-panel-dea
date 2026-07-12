@@ -29,6 +29,10 @@ export function defaultStatePanelConfig(): Panel.panelConfig {
     systemMonitorShowTitle: true,
     systemMonitorPublicVisitModeShow: false,
     netModeChangeButtonShow: true,
+    // v1.4.0 站点设置
+    siteTitle: '',
+    siteFavicon: '',
+    loginBackground: '',
 
   }
 }

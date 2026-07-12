@@ -289,6 +289,34 @@ function resetPanelConfig() {
     </NCard>
 
     <NCard style="border-radius:10px" class="mt-[10px]" size="small">
+      <template #header>
+        <div class="text-slate-500 font-bold">
+          {{ $t('apps.baseSettings.siteSettings') }}
+        </div>
+      </template>
+      <div class="mt-2">
+        <div class="mb-3">
+          <div class="mb-1">
+            {{ $t('apps.baseSettings.siteTitle') }}
+          </div>
+          <NInput v-model:value="panelState.panelConfig.siteTitle" type="text" :maxlength="50" placeholder="Sun-Panel" />
+        </div>
+        <div class="mb-3">
+          <div class="mb-1">
+            {{ $t('apps.baseSettings.siteFavicon') }}
+          </div>
+          <NInput v-model:value="panelState.panelConfig.siteFavicon" type="text" placeholder="/favicon.ico" />
+        </div>
+        <div class="mb-3">
+          <div class="mb-1">
+            {{ $t('apps.baseSettings.loginBackground') }}
+          </div>
+          <NInput v-model:value="panelState.panelConfig.loginBackground" type="text" placeholder="https://..." />
+        </div>
+      </div>
+    </NCard>
+
+    <NCard style="border-radius:10px" class="mt-[10px]" size="small">
       <NPopconfirm
         @positive-click="resetPanelConfig"
       >

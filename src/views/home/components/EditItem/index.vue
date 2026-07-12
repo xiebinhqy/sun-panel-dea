@@ -106,8 +106,13 @@ async function editApi() {
 const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
-    if (!errors)
+    if (!errors) {
+      // URL 检测：提醒未以 http/https 开头
+      if (model.value.url && !/^https?:\/\//i.test(model.value.url))
+        ms.warning(`${t('iconItem.url')} ${t('common.inputPlaceholderByText', { text: 'http(s)://' })}`)
+
       editApi()
+    }
   })
 }
 

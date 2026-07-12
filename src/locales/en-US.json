@@ -99,7 +99,11 @@
       "topMargin": "Top margin",
       "uploadOrDragText": "Click to upload or drag and drop into the box to replace the image",
       "vague": "Blur",
-      "wallpaper": "Wallpaper"
+      "wallpaper": "Wallpaper",
+      "siteSettings": "Site Settings",
+      "siteTitle": "Site Title",
+      "siteFavicon": "Site Favicon",
+      "loginBackground": "Login Background Image"
     },
     "exportImport": {
       "appName": "Export/Import",

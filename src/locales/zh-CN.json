@@ -99,7 +99,11 @@
       "topMargin": "上边距",
       "uploadOrDragText": "点击上传替换图片或拖拽到框内",
       "vague": "模糊",
-      "wallpaper": "壁纸"
+      "wallpaper": "壁纸",
+      "siteSettings": "站点设置",
+      "siteTitle": "站点标题",
+      "siteFavicon": "站点图标",
+      "loginBackground": "登录页背景图"
     },
     "exportImport": {
       "appName": "导出导入",

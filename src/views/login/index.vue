@@ -2,16 +2,16 @@
 import { NButton, NCard, NForm, NFormItem, NGradientText, NInput, NSelect, useMessage } from 'naive-ui'
 import { ref } from 'vue'
 import { login } from '@/api'
-import { useAppStore, useAuthStore } from '@/store'
+import { useAppStore, useAuthStore, usePanelState } from '@/store'
 import { SvgIcon } from '@/components/common'
 import { router } from '@/router'
 import { t } from '@/locales'
 import { languageOptions } from '@/utils/defaultData'
 import type { Language } from '@/store/modules/app/helper'
 
-// const userStore = useUserStore()
 const authStore = useAuthStore()
 const appStore = useAppStore()
+const panelState = usePanelState()
 const ms = useMessage()
 const loading = ref(false)
 const languageValue = ref<Language>(appStore.language)
@@ -62,7 +62,7 @@ function handleChangeLanuage(value: Language) {
 </script>
 
 <template>
-  <div class="login-container">
+  <div class="login-container" :style="panelState.panelConfig.loginBackground ? { backgroundImage: `url(${panelState.panelConfig.loginBackground})` } : {}">
     <NCard class="login-card" style="border-radius: 20px;">
       <div class="mb-5 flex items-center justify-end">
         <div class="mr-2">
@@ -131,12 +131,9 @@ function handleChangeLanuage(value: Language) {
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f2f6ff;
-    }
-
-    /* 夜间模式 */
-    .dark .login-container{
-      background-color: rgb(43, 43, 43);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
     @media (min-width: 600px) {
