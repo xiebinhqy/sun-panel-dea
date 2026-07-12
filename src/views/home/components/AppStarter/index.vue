@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { NLayout, NLayoutContent, NLayoutSider, NSpace } from 'naive-ui'
 import { useAuthStore } from '@/store'
-import { AppLoader, RoundCardModal, SvgIcon } from '@/components/common'
+import { AppLoader, DraggablePanel, SvgIcon } from '@/components/common'
 import { t } from '@/locales'
 
 interface App {
@@ -113,24 +113,23 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <RoundCardModal
+    <DraggablePanel
       v-model:show="show"
-      style="max-width: 900px;"
-      size="small"
+      title=""
     >
       <template #header>
         <div class="flex items-center select-none" @click="collapsed = !collapsed">
           <div class="text-3xl cursor-pointer" style="color:var(--n-color-target)">
-            <SvgIcon class=" transition-all duration-500" :icon="collapsed ? 'tabler-layout-sidebar-right-collapse-filled' : 'tabler-layout-sidebar-left-collapse-filled'" />
+            <SvgIcon class="transition-all duration-500" :icon="collapsed ? 'tabler-layout-sidebar-right-collapse-filled' : 'tabler-layout-sidebar-left-collapse-filled'" />
           </div>
-          <div class="ml-1">
+          <div class="ml-1 text-base font-bold">
             {{ title === '' ? defaultTitle : title }}
           </div>
         </div>
       </template>
-      <div class="w-full h-full app-starter-modal-content">
+      <div class="w-full h-full app-starter-modal-content" style="height: 500px;">
         <NSpace vertical size="large" style="height: 100%;width: 100%;">
-          <NLayout has-sider style="border-radius:0.75rem;">
+          <NLayout has-sider style="border-radius:0.75rem;height:100%;">
             <NLayoutSider
               v-model:collapsed="collapsed"
               collapse-mode="width"
@@ -155,18 +154,14 @@ onUnmounted(() => {
                     @click="handleClickApp(item)"
                   >
                     <div
-                      class="bg-white dark:bg-zinc-800 p-[10px] rounded-lg mb-[5px] font-bold cursor-pointer flex items-center hover:bg-slate-50 focus:bg-slate-50"
+                      class="app-menu-item bg-white dark:bg-zinc-800 p-[10px] rounded-lg mb-[5px] font-bold cursor-pointer flex items-center"
                     >
                       <div class="flex items-center justify-center">
                         <div class="text-lg">
                           <SvgIcon :icon="item.icon" />
                         </div>
-                        <span class="ml-2">{{ item.name }}</span>
+                        <span class="ml-2 menu-item-text">{{ item.name }}</span>
                       </div>
-                    <!-- 更多按钮 -->
-                    <!-- <div class="ml-auto">
-                      <SvgIcon icon="mingcute-more-1-fill" />
-                    </div> -->
                     </div>
                   </div>
                 </div>
@@ -180,13 +175,28 @@ onUnmounted(() => {
           </NLayout>
         </NSpace>
       </div>
-    </RoundCardModal>
+    </DraggablePanel>
   </div>
 </template>
 
 <style scoped>
 .text-shadow {
   text-shadow: 0px 0px 5px gray;
+}
+
+/* 左侧菜单项悬停特效：加粗 + 投影 */
+.app-menu-item {
+  transition: all 0.2s ease;
+}
+
+.app-menu-item:hover {
+  font-weight: 800 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.app-menu-item:hover .menu-item-text {
+  font-weight: 800;
 }
 </style>
 

@@ -9,6 +9,7 @@ import SvgIconOnline from './SvgIconOnline/index.vue'
 import JsonImportExport from './JsonImportExport/index.vue'
 import AppLoader from './AppLoader/index.vue'
 import ItemCard from './ItemCard/index.vue'
+import DraggablePanel from './DraggablePanel/index.vue'
 
 export {
   Verification,
@@ -22,4 +23,5 @@ export {
   JsonImportExport,
   AppLoader,
   ItemCard,
+  DraggablePanel,
 }

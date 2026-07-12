@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
-import { NBackTop, NButton, NButtonGroup, NDropdown, NModal, NSkeleton, NSpin, useDialog, useMessage } from 'naive-ui'
+import { NBackTop, NButton, NDropdown, NModal, NSkeleton, NSpin, useDialog, useMessage } from 'naive-ui'
 import { nextTick, onMounted, ref } from 'vue'
 import { AppIcon, AppStarter, EditItem } from './components'
 import { Clock, SearchBox, SystemMonitor } from '@/components/deskModule'
@@ -502,10 +502,10 @@ function handleAddItem(itemIconGroupId?: number) {
       :options="getDropdownMenuOptions()" :show="dropdownShow" :on-clickoutside="onClickoutside" @select="handleRightMenuSelect"
     />
 
-    <!-- 悬浮按钮 -->
-    <div class="fixed-element shadow-[0_0_10px_2px_rgba(0,0,0,0.2)]">
-      <NButtonGroup vertical>
-        <!-- 网络模式切换按钮组 -->
+    <!-- 悬浮按钮 - 右上角 -->
+    <div class="fixed-element-top shadow-[0_0_10px_2px_rgba(0,0,0,0.2)]">
+      <div class="flex items-center gap-2">
+        <!-- 网络模式切换按钮 -->
         <NButton
           v-if="panelState.networkMode === PanelStateNetworkModeEnum.lan && panelState.panelConfig.netModeChangeButtonShow" color="#2a2a2a6b"
           :title="t('panelHome.changeToWanModel')" @click="handleChangeNetwork(PanelStateNetworkModeEnum.wan)"
@@ -524,6 +524,7 @@ function handleAddItem(itemIconGroupId?: number) {
           </template>
         </NButton>
 
+        <!-- 登录态按钮 -->
         <NButton v-if="authStore.visitMode === VisitMode.VISIT_MODE_LOGIN" color="#2a2a2a6b" @click="settingModalShow = !settingModalShow">
           <template #icon>
             <SvgIcon class="text-white font-xl" icon="majesticons-applications" />
@@ -535,10 +536,9 @@ function handleAddItem(itemIconGroupId?: number) {
             <SvgIcon class="text-white font-xl" icon="material-symbols:account-circle" />
           </template>
         </NButton>
-      </NButtonGroup>
+      </div>
 
       <AppStarter v-model:visible="settingModalShow" />
-      <!-- <Setting v-model:visible="settingModalShow" /> -->
     </div>
 
     <NBackTop
@@ -627,13 +627,11 @@ html {
   text-shadow: 2px 2px 5px rgb(0, 0, 0);
 }
 
-.fixed-element {
+.fixed-element-top {
   position: fixed;
-  /* 将元素固定在屏幕上 */
+  top: 10px;
   right: 10px;
-  /* 距离屏幕顶部的距离 */
-  bottom: 50px;
-  /* 距离屏幕左侧的距离 */
+  z-index: 100;
 }
 
 .icon-info-box {
