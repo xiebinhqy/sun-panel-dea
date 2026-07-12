@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NButton, NModal, NSpace, NSpin, NText, NTag, NProgress, NDivider } from 'naive-ui'
-import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { checkUpdate, performUpdate, getUpdateStatus } from '@/api/system/update'
+import { NButton, NDivider, NModal, NProgress, NSpace, NSpin, NTag, NText } from 'naive-ui'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { checkUpdate, performUpdate } from '@/api/system/update'
 import type { VersionCheckResult } from '@/api/system/update'
 import { t } from '@/locales'
 
@@ -27,7 +27,7 @@ let statusTimer: ReturnType<typeof setInterval> | null = null
 function startProgressSimulation() {
   progressPercent.value = 10
   progressText.value = t('apps.about.updateProgress.pulling')
-  
+
   const steps = [
     { percent: 30, textKey: 'apps.about.updateProgress.pulling', delay: 5000 },
     { percent: 60, textKey: 'apps.about.updateProgress.stopping', delay: 10000 },
@@ -42,7 +42,8 @@ function startProgressSimulation() {
       progressPercent.value = step.percent
       progressText.value = t(step.textKey)
       stepIndex++
-    } else {
+    }
+    else {
       clearInterval(stepTimer)
     }
   }, 3000)
@@ -58,14 +59,15 @@ async function handleCheck() {
   errorMsg.value = ''
   try {
     const res = await checkUpdate<VersionCheckResult>()
-    if (res.code === 0) {
+    if (res.code === 0)
       updateResult.value = res.data
-    } else {
+    else
       errorMsg.value = res.msg || t('common.unknownError')
-    }
-  } catch (e: any) {
+  }
+  catch (e: any) {
     errorMsg.value = e.message || t('common.networkError')
-  } finally {
+  }
+  finally {
     checking.value = false
   }
 }
@@ -75,7 +77,7 @@ async function handleUpdate() {
     updating.value = true
     updateMessage.value = ''
     errorMsg.value = ''
-    
+
     const res = await performUpdate<{ message: string }>()
     if (res.code === 0) {
       const data = res.data as { message?: string }
@@ -83,11 +85,13 @@ async function handleUpdate() {
       // 开始轮询更新状态
       startProgressSimulation()
       startStatusPolling()
-    } else {
+    }
+    else {
       errorMsg.value = res.msg || t('common.unknownError')
       updating.value = false
     }
-  } catch (e: any) {
+  }
+  catch (e: any) {
     errorMsg.value = e.message || t('common.networkError')
     updating.value = false
   }
@@ -96,9 +100,10 @@ async function handleUpdate() {
 function startStatusPolling() {
   statusTimer = setInterval(async () => {
     try {
-      const res = await getUpdateStatus<{ status: string }>()
-      const statusData = res.data as { status?: string }
-      if (res.code === 0 && statusData?.status === 'idle') {
+      // 使用原生 fetch 绕过 axios 全局错误拦截器
+      const response = await fetch('/api/update/status')
+      const res = await response.json()
+      if (res.code === 0 && res.data?.status === 'idle') {
         // 更新完成
         progressPercent.value = 100
         progressText.value = t('apps.about.updateProgress.completed')
@@ -107,8 +112,9 @@ function startStatusPolling() {
           statusTimer = null
         }
       }
-    } catch {
-      // 忽略轮询错误
+    }
+    catch {
+      // 容器重启期间连接失败，静默忽略
     }
   }, 3000)
 }
@@ -123,27 +129,25 @@ function handleClose() {
 }
 
 function handleCancel() {
-  if (updating.value) return // 更新中不允许关闭
+  if (updating.value)
+    return // 更新中不允许关闭
   handleClose()
 }
 
 watch(() => props.show, (newVal: boolean) => {
-  if (newVal) {
+  if (newVal)
     handleCheck()
-  }
 })
 
 onMounted(() => {
-  if (props.show) {
+  if (props.show)
     handleCheck()
-  }
 })
 </script>
 
 <template>
   <NModal
     :show="props.show"
-    @update:show="handleCancel"
     :mask-closable="!updating"
     preset="card"
     style="max-width: 600px; border-radius: 1rem;"
@@ -151,24 +155,33 @@ onMounted(() => {
     size="small"
     role="dialog"
     aria-modal="true"
+    @update:show="handleCancel"
   >
     <!-- 检查中 -->
     <div v-if="checking && !updateResult" class="flex flex-col items-center py-8">
       <NSpin size="large" />
-      <NText class="mt-4">{{ t('apps.about.checking') }}</NText>
+      <NText class="mt-4">
+        {{ t('apps.about.checking') }}
+      </NText>
     </div>
 
     <!-- 错误信息 -->
     <div v-if="errorMsg && !checking" class="flex flex-col items-center py-4">
-      <NText type="error">{{ errorMsg }}</NText>
-      <NButton class="mt-4" @click="handleCheck">{{ t('common.retry') }}</NButton>
+      <NText type="error">
+        {{ errorMsg }}
+      </NText>
+      <NButton class="mt-4" @click="handleCheck">
+        {{ t('common.retry') }}
+      </NButton>
     </div>
 
     <!-- 检查结果 -->
     <div v-if="updateResult && !checking && !updating" class="py-4">
       <div class="flex items-center justify-between mb-4">
         <NText>{{ t('apps.about.currentVersion') }}: </NText>
-        <NTag type="info">{{ updateResult.currentVersion }}</NTag>
+        <NTag type="info">
+          {{ updateResult.currentVersion }}
+        </NTag>
       </div>
       <div class="flex items-center justify-between mb-4">
         <NText>{{ t('apps.about.latestVersion') }}: </NText>
@@ -188,7 +201,9 @@ onMounted(() => {
 
       <!-- 更新日志 -->
       <NDivider />
-      <NText depth="3" class="text-sm">{{ t('apps.about.releaseNotes') }}</NText>
+      <NText depth="3" class="text-sm">
+        {{ t('apps.about.releaseNotes') }}
+      </NText>
       <div class="mt-2 max-h-40 overflow-y-auto text-sm bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
         <pre class="whitespace-pre-wrap">{{ updateResult.releaseNotes || t('apps.about.noReleaseNotes') }}</pre>
       </div>
@@ -214,22 +229,26 @@ onMounted(() => {
     <div v-if="updating" class="py-4">
       <div class="flex flex-col items-center">
         <NSpin size="large" />
-        <NText class="mt-4 text-lg font-bold">{{ t('apps.about.updating') }}</NText>
-        
+        <NText class="mt-4 text-lg font-bold">
+          {{ t('apps.about.updating') }}
+        </NText>
+
         <div class="w-full mt-6">
           <NProgress
             type="line"
             :percentage="progressPercent"
-            :indicator-placement="'inside'"
+            indicator-placement="inside"
             :height="24"
             :border-radius="12"
-            :fill-bar-color="'#18a058'"
+            fill-bar-color="#18a058"
             processing
           />
         </div>
-        
-        <NText class="mt-2" depth="3">{{ progressText }}</NText>
-        
+
+        <NText class="mt-2" depth="3">
+          {{ progressText }}
+        </NText>
+
         <div class="mt-6 text-center">
           <NText depth="2" class="text-sm">
             {{ t('apps.about.updateTip') }}
@@ -242,7 +261,7 @@ onMounted(() => {
     <template #footer>
       <div class="flex justify-end">
         <NSpace>
-          <NButton @click="handleCancel" :disabled="updating">
+          <NButton :disabled="updating" @click="handleCancel">
             {{ updating ? t('common.updating') : t('common.close') }}
           </NButton>
           <NButton v-if="!updateResult?.hasUpdate && !updating" type="primary" @click="handleClose">
